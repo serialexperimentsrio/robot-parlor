@@ -1,0 +1,82 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --paper: oklch(96% 0.015 75);
+  --paper-dimmer: oklch(88% 0.025 72);
+  --night: oklch(13% 0.015 55);
+  --night-lift: oklch(19% 0.018 55);
+  --night-lift2: oklch(25% 0.02 55);
+  --copper: oklch(68% 0.14 52);
+  --copper-light: oklch(78% 0.12 58);
+  --copper-dark: oklch(52% 0.13 42);
+  --rust: oklch(52% 0.15 30);
+  --sage: oklch(68% 0.08 150);
+  --ink-on-paper: oklch(22% 0.02 60);
+  --muted-on-paper: oklch(50% 0.03 65);
+  --faint-on-paper: oklch(65% 0.03 65);
+  --paper-border: oklch(85% 0.02 72);
+  --paper-hover: oklch(88% 0.02 72);
+  --paper-muted: oklch(80% 0.02 72);
+  --paper-tint: oklch(91% 0.025 72);
+  --muted-on-night: oklch(58% 0.03 60);
+  --dim-on-night: oklch(38% 0.02 55);
+
+  --font: var(--font-quantico), sans-serif;
+
+  --max-w: 1280px;
+  --edge: clamp(1.25rem, 5vw, 3rem);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--night);
+  color: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+:focus-visible {
+  outline: 2px solid var(--copper);
+  outline-offset: 3px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: var(--font);
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* shared utility: small all-caps label (0.6rem, spaced, bold) */
+.label-caps {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
