@@ -706,64 +706,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* FOOTER */}
-        <footer className={styles.footer}>
-          <div className={styles["footer-inner"]}>
-            <div className={cx(styles["footer-col"], styles["footer-col--brand"])}>
-              <a href="/" className={styles["footer-brand"]} aria-label="Robot Parlor">
-                <svg
-                  width="22"
-                  height="22"
-                  viewBox="0 0 28 28"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M14 2 L25.5 8.5 V21.5 L14 28 L2.5 21.5 V8.5 Z"
-                    fill="var(--copper)"
-                  />
-                  <circle cx="14" cy="15" r="4" fill="var(--night)" />
-                  <circle cx="14" cy="15" r="1.5" fill="var(--copper-light)" />
-                </svg>
-                <span>ROBOT PARLOR</span>
-              </a>
-              <p className={styles["footer-tagline"]}>
-                Parts for the robots that share your home.
-              </p>
-              <p className={styles["footer-copy"]}>
-                © 2026 Robot Parlor, Inc. All rights reserved.
-              </p>
-            </div>
-
-            <nav
-              className={cx(styles["footer-col"], styles["footer-col--links"])}
-              aria-label="Footer navigation"
-            >
-              <p className={styles["footer-col-label"]}>Store</p>
-              {["Shop All", "Compatibility", "Guides", "New Arrivals"].map(
-                (l) => (
-                  <a key={l} href="#" className={styles["footer-link"]}>
-                    {l}
-                  </a>
-                ),
-              )}
-            </nav>
-
-            <nav
-              className={cx(styles["footer-col"], styles["footer-col--links"])}
-              aria-label="Company navigation"
-            >
-              <p className={styles["footer-col-label"]}>Company</p>
-              {["About", "Contact", "Privacy", "Terms"].map((l) => (
-                <a key={l} href="#" className={styles["footer-link"]}>
-                  {l}
-                </a>
-              ))}
-            </nav>
-          </div>
-        </footer>
       </div>
-
     </>
   );
 }
