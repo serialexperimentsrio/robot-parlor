@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { ChatWidget } from "../ChatWidget";
 import styles from "./styles.module.css";
 
 const CATEGORIES = [
@@ -738,6 +739,9 @@ export default function HomePage() {
           </div>
         </footer>
       </div>
+
+      {/* CHAT */}
+      <ChatWidget />
     </>
   );
 }
