@@ -34,8 +34,48 @@ PRICING & POLICIES:
 
 Keep answers short unless a detailed comparison is genuinely useful. Never make up products or features.`;
 
+const MAX_MESSAGES = 20;
+const MAX_CHARS = 2000;
+const WINDOW_MS = 60_000;
+const MAX_PER_WINDOW = 10;
+
+type ChatMessage = { role: "user" | "assistant"; content: string };
+
+// ponytail: in-memory, so it's per serverless instance and resets on cold starts. Move to Vercel KV / Upstash if real abuse shows up.
+const hits = new Map<string, number[]>();
+
+function rateLimited(ip: string) {
+  const now = Date.now();
+  if (hits.size > 1000) hits.clear();
+  const recent = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
+  recent.push(now);
+  hits.set(ip, recent);
+  return recent.length > MAX_PER_WINDOW;
+}
+
+// Only user/assistant turns with short text get through, so a caller can't add
+// their own system prompt or send huge payloads on our key.
+function parseMessages(body: unknown): ChatMessage[] | null {
+  const messages = (body as { messages?: unknown } | null)?.messages;
+  if (!Array.isArray(messages) || messages.length === 0) return null;
+  const recent = messages.slice(-MAX_MESSAGES);
+  for (const m of recent) {
+    if (m?.role !== "user" && m?.role !== "assistant") return null;
+    if (typeof m.content !== "string" || m.content.length > MAX_CHARS) return null;
+  }
+  return recent.map(({ role, content }) => ({ role, content }));
+}
+
 export async function POST(req: NextRequest) {
-  const { messages } = await req.json();
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || "unknown";
+  if (rateLimited(ip)) {
+    return Response.json({ error: "Too many messages. Try again in a minute." }, { status: 429 });
+  }
+
+  const messages = parseMessages(await req.json().catch(() => null));
+  if (!messages) {
+    return Response.json({ error: "Invalid messages." }, { status: 400 });
+  }
 
   const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
@@ -56,11 +96,8 @@ export async function POST(req: NextRequest) {
   });
 
   if (!response.ok) {
-    const error = await response.text();
-    return new Response(JSON.stringify({ error }), {
-      status: response.status,
-      headers: { "Content-Type": "application/json" },
-    });
+    console.error("[chat] Groq error", response.status, await response.text());
+    return Response.json({ error: "Chat is unavailable right now." }, { status: 502 });
   }
 
   return new Response(response.body, {
