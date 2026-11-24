@@ -23,3 +23,9 @@ echo "GROQ_API_KEY=your-key-here" > .env.local
 bun install
 bun dev
 ```
+
+## License
+
+Copyright 2026 Rio <engineer@disr.it>
+
+Licensed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
